@@ -233,20 +233,36 @@ PC_COLORS = {
 
 
 # ─── DATA LOADING ─────────────────────────────────────────────────────────────
+TRANSFORMED_PATH = "data/APL_Logistics_Transformed.csv"
+
+# Auto-generate transformed CSV if it doesn't exist (must run OUTSIDE cache)
+import os, subprocess, sys
+if not os.path.exists(TRANSFORMED_PATH):
+    with st.spinner("⚙️ First run: generating transformed dataset (~30 sec)…"):
+        try:
+            result = subprocess.run(
+                [sys.executable, "data_transformation.py"],
+                capture_output=True, text=True, timeout=300,
+                cwd=os.path.dirname(os.path.abspath(__file__))
+            )
+            if result.returncode != 0:
+                st.error(
+                    f"❌ Transformation failed.\n\n"
+                    f"**Error:**\n```\n{result.stderr[-2000:]}\n```\n\n"
+                    f"Please run `python data_transformation.py` in the project folder and restart."
+                )
+                st.stop()
+        except Exception as e:
+            st.error(
+                f"❌ Could not run transformation: {e}\n\n"
+                f"Please run `python data_transformation.py` in the project folder and restart."
+            )
+            st.stop()
+
+
 @st.cache_data(show_spinner="🔄 Loading APL Logistics dataset …")
 def load_data():
-    import os, subprocess
-    transformed_path = "data/APL_Logistics_Transformed.csv"
-    if not os.path.exists(transformed_path):
-        # Auto-run transformation pipeline if transformed file missing
-        st.info("⚙️ First run: generating transformed dataset (takes ~30 seconds)…")
-        try:
-            subprocess.run(["python", "data_transformation.py"], check=True, timeout=300)
-        except Exception as e:
-            st.error(f"❌ Could not generate dataset: {e}. "
-                     f"Please run `python data_transformation.py` manually and restart.")
-            st.stop()
-    df = pd.read_csv(transformed_path, low_memory=False)
+    df = pd.read_csv(TRANSFORMED_PATH, low_memory=False)
     df["discount_band"] = df["discount_band"].astype(str)
     return df
 
