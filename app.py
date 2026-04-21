@@ -202,17 +202,27 @@ footer { visibility: hidden; }
 """, unsafe_allow_html=True)
 
 # ─── PLOTLY DARK TEMPLATE ──────────────────────────────────────────────────────
+_LEGEND_BASE = dict(bgcolor="rgba(10,22,48,0.6)", bordercolor="rgba(37,99,168,0.3)", borderwidth=1)
 DARK_LAYOUT = dict(
     template="plotly_dark",
     paper_bgcolor="rgba(10,22,48,0.0)",
     plot_bgcolor="rgba(10,22,48,0.0)",
     font=dict(family="Inter", color="#c8ddf0"),
     title_font=dict(size=14, color="#93c5fd", family="Inter"),
-    legend=dict(bgcolor="rgba(10,22,48,0.6)", bordercolor="rgba(37,99,168,0.3)", borderwidth=1),
     xaxis=dict(gridcolor="rgba(37,99,168,0.12)", linecolor="rgba(37,99,168,0.3)"),
     yaxis=dict(gridcolor="rgba(37,99,168,0.12)", linecolor="rgba(37,99,168,0.3)"),
     margin=dict(t=50, l=10, r=10, b=10),
 )
+
+def dark(**extra):
+    """Merge DARK_LAYOUT with extra kwargs safely — legend keys are merged, not overridden."""
+    layout = dict(DARK_LAYOUT)
+    if "legend" in extra:
+        layout["legend"] = {**_LEGEND_BASE, **extra.pop("legend")}
+    else:
+        layout["legend"] = _LEGEND_BASE
+    layout.update(extra)
+    return layout
 RDYLGN     = "RdYlGn"
 BAND_ORDER = ["No Discount","1-5%","6-10%","11-15%","16-20%","21-25%"]
 TIER_COLORS = {
@@ -307,11 +317,6 @@ with st.sidebar:
 
     st.markdown("""
         <hr style='border:none;border-top:1px solid rgba(37,99,168,0.3);margin:14px 0;'>
-        <div style='font-size:0.68rem;color:#4a7aa8;text-align:center;line-height:1.7;'>
-            APL Logistics Analytics<br>
-            Data Intelligence Research © 2024<br>
-            <span style='color:#2563a8;'>Unified Mentor Pvt. Ltd.</span>
-        </div>
     """, unsafe_allow_html=True)
 
 
