@@ -201,28 +201,26 @@ footer { visibility: hidden; }
 </style>
 """, unsafe_allow_html=True)
 
-# ─── PLOTLY DARK TEMPLATE ──────────────────────────────────────────────────────
-_LEGEND_BASE = dict(bgcolor="rgba(10,22,48,0.6)", bordercolor="rgba(37,99,168,0.3)", borderwidth=1)
+# ─── PLOTLY DARK TEMPLATE ─────────────────────────────────────────────────────
+# DARK_LAYOUT has NO dict-typed keys (xaxis/yaxis/legend) so **DARK_LAYOUT
+# NEVER conflicts with identical kwargs passed to update_layout().
+_AX = dict(gridcolor="rgba(37,99,168,0.12)", linecolor="rgba(37,99,168,0.3)")
+_LG = dict(bgcolor="rgba(10,22,48,0.6)", bordercolor="rgba(37,99,168,0.3)", borderwidth=1)
 DARK_LAYOUT = dict(
     template="plotly_dark",
     paper_bgcolor="rgba(10,22,48,0.0)",
     plot_bgcolor="rgba(10,22,48,0.0)",
     font=dict(family="Inter", color="#c8ddf0"),
     title_font=dict(size=14, color="#93c5fd", family="Inter"),
-    xaxis=dict(gridcolor="rgba(37,99,168,0.12)", linecolor="rgba(37,99,168,0.3)"),
-    yaxis=dict(gridcolor="rgba(37,99,168,0.12)", linecolor="rgba(37,99,168,0.3)"),
     margin=dict(t=50, l=10, r=10, b=10),
 )
 
-def dark(**extra):
-    """Merge DARK_LAYOUT with extra kwargs safely — legend keys are merged, not overridden."""
-    layout = dict(DARK_LAYOUT)
-    if "legend" in extra:
-        layout["legend"] = {**_LEGEND_BASE, **extra.pop("legend")}
-    else:
-        layout["legend"] = _LEGEND_BASE
-    layout.update(extra)
-    return layout
+def _ax(fig):
+    "Apply axis + legend styling without polluting DARK_LAYOUT."
+    fig.update_xaxes(**_AX)
+    fig.update_yaxes(**_AX)
+    return fig
+
 RDYLGN     = "RdYlGn"
 BAND_ORDER = ["No Discount","1-5%","6-10%","11-15%","16-20%","21-25%"]
 TIER_COLORS = {
@@ -419,7 +417,8 @@ with tabs[0]:
                     marker_color="#22c55e",
                     text=mkt_g["Profit"].apply(lambda v: f"${v/1e6:.2f}M"),
                     textposition="outside", textfont=dict(color="#86efac", size=10))
-        fig.update_layout(**DARK_LAYOUT, title="Revenue vs Profit by Market",
+        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(title="Revenue vs Profit by Market",
                           barmode="group", height=380,
                           legend=dict(orientation="h", y=1.08, x=0))
         st.plotly_chart(fig, use_container_width=True)
@@ -432,7 +431,8 @@ with tabs[0]:
                       color="Class", color_discrete_map=PC_COLORS)
         fig2.update_traces(textposition="inside", textinfo="percent+label",
                            textfont=dict(size=10, family="Inter"))
-        fig2.update_layout(**DARK_LAYOUT, height=380, showlegend=True)
+        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(height=380, showlegend=True)
         st.plotly_chart(fig2, use_container_width=True)
 
     # ── Row 2 Charts
@@ -447,7 +447,8 @@ with tabs[0]:
                       color="Margin%", color_continuous_scale=RDYLGN,
                       text=seg_g["Margin%"].round(2).astype(str) + "%")
         fig3.update_traces(textposition="outside", textfont=dict(color="#c8ddf0", size=11))
-        fig3.update_layout(**DARK_LAYOUT, height=360,
+        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(height=360,
                            xaxis_title="Segment", yaxis_title="Margin %",
                            coloraxis_showscale=False)
         st.plotly_chart(fig3, use_container_width=True)
@@ -462,7 +463,8 @@ with tabs[0]:
                       title="Revenue & Profit by Shipping Mode",
                       barmode="group",
                       color_discrete_sequence=["#2563a8","#22c55e"])
-        fig4.update_layout(**DARK_LAYOUT, height=360)
+        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(height=360)
         st.plotly_chart(fig4, use_container_width=True)
 
     st.markdown(
@@ -519,7 +521,8 @@ with tabs[1]:
                      color="Margin%", color_continuous_scale="Greens",
                      text=top15["Total_Profit"].apply(lambda v: f"${v:,.0f}"))
         fig.update_traces(textposition="outside", textfont=dict(color="#86efac", size=9))
-        fig.update_layout(**DARK_LAYOUT, height=480, yaxis=dict(autorange="reversed"),
+        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(height=480, yaxis=dict(autorange="reversed"),
                           coloraxis_showscale=False)
         st.plotly_chart(fig, use_container_width=True)
 
@@ -530,7 +533,8 @@ with tabs[1]:
                        color="Total_Profit", color_continuous_scale="Reds_r",
                        text=bot15["Total_Profit"].apply(lambda v: f"${v:,.0f}"))
         fig2.update_traces(textposition="outside", textfont=dict(color="#fca5a5", size=9))
-        fig2.update_layout(**DARK_LAYOUT, height=480, yaxis=dict(autorange="reversed"),
+        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(height=480, yaxis=dict(autorange="reversed"),
                            coloraxis_showscale=False)
         st.plotly_chart(fig2, use_container_width=True)
 
@@ -544,7 +548,8 @@ with tabs[1]:
                       color="Tier", color_discrete_map=TIER_COLORS, hole=0.5)
         fig3.update_traces(textposition="inside", textinfo="percent+label",
                            textfont=dict(size=10))
-        fig3.update_layout(**DARK_LAYOUT, height=400)
+        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(height=400)
         st.plotly_chart(fig3, use_container_width=True)
 
     with r2c2:
@@ -555,7 +560,8 @@ with tabs[1]:
                           labels={"Total_Sales":"Total Sales ($)","Total_Profit":"Total Profit ($)"})
         fig4.add_hline(y=0, line_dash="dash", line_color="#ef4444",
                        annotation_text="Break-even", annotation_font_color="#fca5a5")
-        fig4.update_layout(**DARK_LAYOUT, height=400)
+        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(height=400)
         st.plotly_chart(fig4, use_container_width=True)
 
     # ── Segment contribution table
@@ -624,7 +630,8 @@ with tabs[2]:
                      color="Margin%", color_continuous_scale="Greens",
                      text=top_p["Profit"].apply(lambda v: f"${v:,.0f}"))
         fig.update_traces(textposition="outside", textfont=dict(color="#86efac", size=9))
-        fig.update_layout(**DARK_LAYOUT, height=480,
+        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(height=480,
                           yaxis=dict(autorange="reversed"), coloraxis_showscale=False)
         st.plotly_chart(fig, use_container_width=True)
 
@@ -636,7 +643,8 @@ with tabs[2]:
                           color="Profit", color_continuous_scale="Reds_r",
                           text=loss_p["Profit"].apply(lambda v: f"${v:,.0f}"))
             fig2.update_traces(textposition="outside", textfont=dict(color="#fca5a5", size=9))
-            fig2.update_layout(**DARK_LAYOUT, height=480,
+            fig.update_layout(**DARK_LAYOUT)
+            fig.update_layout(height=480,
                                yaxis=dict(autorange="reversed"), coloraxis_showscale=False)
             st.plotly_chart(fig2, use_container_width=True)
         else:
@@ -652,7 +660,8 @@ with tabs[2]:
     fig3 = px.imshow(cat_pivot, title="Category Profit ($) by Customer Segment",
                      color_continuous_scale="Blues", aspect="auto",
                      labels=dict(color="Profit ($)"))
-    fig3.update_layout(**DARK_LAYOUT, height=520)
+    fig.update_layout(**DARK_LAYOUT)
+    fig.update_layout(height=520)
     st.plotly_chart(fig3, use_container_width=True)
 
     # ── Treemap + scatter
@@ -675,7 +684,8 @@ with tabs[2]:
                           color="category_name", size="Orders", size_max=28,
                           hover_name="product_name", opacity=0.8,
                           title="Product Revenue vs Margin % (bubble = order count)")
-        fig5.update_layout(**DARK_LAYOUT, height=420, showlegend=False)
+        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(height=420, showlegend=False)
         st.plotly_chart(fig5, use_container_width=True)
 
 
@@ -730,7 +740,8 @@ with tabs[3]:
                         text=[f"{row['Avg_Margin']:.2f}%"],
                         textposition="outside",
                         name=str(row["discount_band"]))
-        fig.update_layout(**DARK_LAYOUT, title="Average Gross Margin % by Discount Band",
+        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(title="Average Gross Margin % by Discount Band",
                           height=400, xaxis_title="Discount Band", yaxis_title="Avg Margin %",
                           showlegend=False)
         st.plotly_chart(fig, use_container_width=True)
@@ -746,7 +757,8 @@ with tabs[3]:
                           labels={"order_item_discount_rate":"Discount Rate",
                                   "order_item_profit_ratio":"Profit Ratio"},
                           title=f"Discount Rate vs Profit Ratio  (Pearson r = {r_val:.4f}, p = {p_val:.3f})")
-        fig2.update_layout(**DARK_LAYOUT, height=400)
+        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(height=400)
         st.plotly_chart(fig2, use_container_width=True)
 
     # ── Category discount vs margin + what-if simulator
@@ -763,7 +775,8 @@ with tabs[3]:
                           labels={"Avg_Discount":"Avg Discount Rate","Avg_Margin":"Avg Margin %"},
                           color="Avg_Margin", color_continuous_scale=RDYLGN)
         fig3.update_traces(textposition="top center", textfont=dict(size=8, color="#c8ddf0"))
-        fig3.update_layout(**DARK_LAYOUT, height=400, showlegend=False)
+        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(height=400, showlegend=False)
         st.plotly_chart(fig3, use_container_width=True)
 
     with r2c2:
@@ -829,7 +842,8 @@ with tabs[3]:
                      color_continuous_scale=RDYLGN, aspect="auto",
                      labels=dict(color="Avg Margin %"))
     fig5.update_traces(text=ero_pivot.values.round(2), texttemplate="%{text:.1f}%")
-    fig5.update_layout(**DARK_LAYOUT, height=320)
+    fig.update_layout(**DARK_LAYOUT)
+    fig.update_layout(height=320)
     st.plotly_chart(fig5, use_container_width=True)
 
     # ── Discount band detailed table
@@ -889,7 +903,8 @@ with tabs[4]:
                     marker_color="#22c55e",
                     text=ms["Profit"].apply(lambda v: f"${v/1e6:.2f}M"),
                     textposition="outside", textfont=dict(color="#86efac", size=10))
-        fig.update_layout(**DARK_LAYOUT, title="Revenue vs Profit by Market",
+        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(title="Revenue vs Profit by Market",
                           barmode="group", height=400,
                           legend=dict(orientation="h", y=1.08))
         st.plotly_chart(fig, use_container_width=True)
@@ -902,7 +917,8 @@ with tabs[4]:
                                       "Avg_Disc":":.2%","Avg_OV":":.2f"},
                           title="Market Revenue vs Profit Margin % (bubble = order volume)")
         fig2.update_traces(textposition="top center", textfont=dict(size=10))
-        fig2.update_layout(**DARK_LAYOUT, height=400, showlegend=False)
+        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(height=400, showlegend=False)
         st.plotly_chart(fig2, use_container_width=True)
 
     # ── Region analysis
@@ -920,7 +936,8 @@ with tabs[4]:
                       color="Margin%", color_continuous_scale=RDYLGN,
                       text=reg["Margin%"].round(1).astype(str) + "%")
         fig3.update_traces(textposition="outside", textfont=dict(color="#c8ddf0", size=8))
-        fig3.update_layout(**DARK_LAYOUT, height=420,
+        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(height=420,
                            xaxis_tickangle=-40, coloraxis_showscale=False)
         st.plotly_chart(fig3, use_container_width=True)
 
@@ -986,7 +1003,8 @@ with tabs[5]:
                      color="Late_Rate_pct", color_continuous_scale="Reds",
                      text=late_m["Late_Rate_pct"].astype(str) + "%")
         fig.update_traces(textposition="outside", textfont=dict(color="#fca5a5", size=11))
-        fig.update_layout(**DARK_LAYOUT, height=380,
+        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(height=380,
                           coloraxis_showscale=False,
                           yaxis_title="Late Delivery Rate (%)")
         st.plotly_chart(fig, use_container_width=True)
@@ -998,7 +1016,8 @@ with tabs[5]:
                       title="Delivery Status Distribution", hole=0.45)
         fig2.update_traces(textposition="inside", textinfo="percent+label",
                            textfont=dict(size=10, family="Inter"))
-        fig2.update_layout(**DARK_LAYOUT, height=380)
+        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(height=380)
         st.plotly_chart(fig2, use_container_width=True)
 
     r2c1, r2c2 = st.columns(2)
@@ -1006,7 +1025,8 @@ with tabs[5]:
         fig3 = px.box(df, x="shipping_mode", y="shipping_delay_days",
                       title="Shipping Delay Distribution by Mode (days)",
                       color="shipping_mode")
-        fig3.update_layout(**DARK_LAYOUT, height=380, showlegend=False,
+        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(height=380, showlegend=False,
                            yaxis_title="Delay Days")
         st.plotly_chart(fig3, use_container_width=True)
 
@@ -1019,7 +1039,8 @@ with tabs[5]:
                       title="Profit Before vs After Shipping Cost Proxy",
                       barmode="group",
                       color_discrete_sequence=["#2563a8","#f59e0b"])
-        fig4.update_layout(**DARK_LAYOUT, height=380)
+        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(height=380)
         st.plotly_chart(fig4, use_container_width=True)
 
     # ── Margin erosion risk by region
@@ -1035,7 +1056,8 @@ with tabs[5]:
                   color="Avg_Risk", color_continuous_scale="RdYlGn_r",
                   text=risk_agg["Avg_Risk"].round(1))
     fig5.update_traces(textposition="outside", textfont=dict(color="#fca5a5", size=8))
-    fig5.update_layout(**DARK_LAYOUT, height=400, xaxis_tickangle=-35,
+    fig.update_layout(**DARK_LAYOUT)
+    fig.update_layout(height=400, xaxis_tickangle=-35,
                        coloraxis_showscale=False)
     st.plotly_chart(fig5, use_container_width=True)
 
