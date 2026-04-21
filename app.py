@@ -580,7 +580,7 @@ with tabs[1]:
             "Revenue":"${:,.0f}", "Profit":"${:,.0f}",
             "Margin%":"{:.2f}%", "Revenue %":"{:.1f}%",
             "Profit %":"{:.1f}%", "Avg Order $":"${:,.2f}"
-        }).background_gradient(subset=["Margin%"], cmap="RdYlGn"),
+        }).bar(subset=["Margin%"], color=["#ef4444", "#22c55e"]),
         use_container_width=True
     )
 
@@ -860,7 +860,7 @@ with tabs[3]:
             "Avg Margin %":"{:.2f}%",
             "Total Profit ($)":"${:,.0f}",
             "Orders":"{:,}"
-        }).background_gradient(subset=["Avg Margin %"], cmap="RdYlGn"),
+        }).bar(subset=["Avg Margin %"], color=["#ef4444", "#22c55e"]),
         use_container_width=True
     )
 
@@ -965,7 +965,7 @@ with tabs[4]:
             "Margin %":"{:.2f}%", "Rev %":"{:.1f}%",
             "Avg Order ($)":"${:,.2f}", "Avg Disc Rate":"{:.2%}",
             "Orders":"{:,}", "Customers":"{:,}"
-        }).background_gradient(subset=["Margin %"], cmap="RdYlGn"),
+        }).bar(subset=["Margin %"], color=["#ef4444", "#22c55e"]),
         use_container_width=True
     )
 
@@ -1082,6 +1082,6 @@ with tabs[5]:
             "Margin %":"{:.2f}%", "Rev %":"{:.1f}%",
             "Late Rate %":"{:.2f}%", "Avg Delay (days)":"{:.2f}",
             "Orders":"{:,}"
-        }).background_gradient(subset=["Margin %"], cmap="RdYlGn"),
+        }).bar(subset=["Margin %"], color=["#ef4444", "#22c55e"]),
         use_container_width=True
     )
