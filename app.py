@@ -2,6 +2,7 @@
 app.py – APL Logistics | Profitability Intelligence Dashboard
 Premium dark-mode Streamlit application | Streamlit Cloud deployable
 Run: streamlit run app.py
+Version: 3.1 — DARK_LAYOUT conflict fix (no xaxis/yaxis/legend in base dict)
 """
 
 import warnings
