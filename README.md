@@ -2,7 +2,6 @@
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://python.org)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.32%2B-red)](https://streamlit.io)
-[![Research](https://img.shields.io/badge/Journal-Data%20Intelligence%20(MIT%20Press)-darkblue)](https://direct.mit.edu/dint)
 
 > **Customer, Product & Profitability Performance Analysis in Supply Chain Operations**  
 > Data Science Internship Project — Unified Mentor Pvt. Ltd. | APL Logistics (KWE Group)
