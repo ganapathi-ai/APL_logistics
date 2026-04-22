@@ -13,9 +13,7 @@
 
 A full-stack data analytics project that transforms 180,519 APL Logistics order records into actionable profitability intelligence, delivered via an interactive Streamlit dashboard and a 17–20 page research manuscript.
 
-**Target Journals:**
-- [Data Intelligence](https://direct.mit.edu/dint) (MIT Press) — ISSN 2096-7004 | E-ISSN 2641-435X  
-- [Information Sciences](https://www.sciencedirect.com/journal/information-sciences) (Elsevier) — ISSN 0020-0255
+
 
 ---
 
