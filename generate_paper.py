@@ -2,11 +2,6 @@
 generate_paper.py
 =================
 APL Logistics — Customer, Product & Profitability Performance Analysis
-Generates: APL_Logistics_Research_Paper.docx  (15–20 pages)
-
-Target Journals:
-  • Data Intelligence (MIT Press)  — ISSN 2096-7004 | E-ISSN 2641-435X
-  • Information Sciences (Elsevier) — ISSN 0020-0255
 
 All numerical values are sourced DIRECTLY from APL_Logistics_Transformed.csv
 (itself derived from APL_Logistics.csv — 180,519 raw records).
