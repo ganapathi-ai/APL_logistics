@@ -43,7 +43,6 @@ APL_data_intelligence/
 │
 ├── app.py                             # Streamlit dashboard (6 analytical tabs)
 ├── data_transformation.py             # Data pipeline: raw → 79-column transformed CSV
-├── generate_paper.py                  # Research paper generator → .docx
 ├── requirements.txt                   # Python dependencies
 ├── .streamlit/config.toml             # Streamlit configuration
 └── README.md
@@ -120,22 +119,6 @@ scipy>=1.12.0
 python-docx>=1.1.0
 openpyxl>=3.1.0
 ```
-
----
-
-## Research Paper Sections
-
-1. Introduction
-2. Literature Review (6 sub-sections)
-3. Dataset Description (with descriptive statistics table)
-4. Methodology (6 sub-sections)
-5. Results & Analysis (8 sub-sections — all values from data)
-6. Dashboard Design & Implementation
-7. Discussion (6 sub-sections)
-8. Recommendations (7 actionable items)
-9. Conclusion
-10. References (18 academic citations)
-11. Appendix A: Pipeline Specification
 
 ---
 
