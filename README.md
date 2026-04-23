@@ -10,7 +10,7 @@
 
 ## Overview
 
-A full-stack data analytics project that transforms 180,519 APL Logistics order records into actionable profitability intelligence, delivered via an interactive Streamlit dashboard and a 17–20 page research manuscript.
+A full-stack data analytics project that transforms 180,519 APL Logistics order records into actionable profitability intelligence, delivered via an interactive Streamlit dashboard 
 
 https://apllogistics-j9ddnumcoteq47whr93vrs.streamlit.app/
 
