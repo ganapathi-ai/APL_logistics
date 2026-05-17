@@ -122,4 +122,4 @@ The raw CSV (`data/APL_Logistics.csv`, ~62 MB) and the transformed CSV (`data/AP
 
 ---
 
-*APL Logistics Analytics | Unified Mentor Data Science Internship 
+Ganapathi Kakarla | Unified Mentor Data Science Internship 
