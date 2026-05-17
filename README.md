@@ -74,13 +74,7 @@ Opens at **http://localhost:8501**
 
 > **Note:** On first run, if `APL_Logistics_Transformed.csv` is missing, the dashboard auto-runs the transformation pipeline with a progress spinner.
 
-### 5. Generate research paper
-```bash
-python generate_paper.py
-```
-Produces `APL_Logistics_Research_Paper.docx` — a 17–20 page manuscript with all values sourced directly from the transformed data.
 
----
 
 ## Dashboard Modules
 
