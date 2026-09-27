@@ -94,7 +94,7 @@ Opens at **http://localhost:8501**
 ## Analytical Methodology
 
 1. **Data Cleaning & Validation** — Latin-1 ingestion, snake_case renaming, categorical standardisation
-2. **Feature Engineering** — 39 engineered features across 6 functional groups
+2. **Feature Engineering** — 43 engineered features across 10 functional groups
 3. **Profitability Classification** — 5-tier order classification (Loss-Making → High-Margin)
 4. **Customer Value Tiering** — Quartile-based profit tiers (Loss Customer → Premium)
 5. **Statistical Analysis** — Pearson correlation, discount-band aggregate analysis, scenario simulation
